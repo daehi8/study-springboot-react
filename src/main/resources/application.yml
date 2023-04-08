@@ -5,7 +5,7 @@ spring:
       enabled: true
 
   datasource:
-    url: jdbc:h2:mem:testdb
+    url: jdbc:h2:tcp://localhost/~/h2
     driver-class-name: org.h2.Driver
     username: sa
     password:
