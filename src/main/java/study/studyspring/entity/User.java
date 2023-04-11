@@ -4,6 +4,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.Set;
 
+
 @Entity
 @Table(name = "`user`")
 @Getter
@@ -11,7 +12,6 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class User {
 
     @Id
