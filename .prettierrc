@@ -1,0 +1,7 @@
+{
+    "singlerQuote":true,
+    "semi":true,
+    "tebWidth":2,
+    "trailingComma": "all",
+    "printWidth": 80
+}
