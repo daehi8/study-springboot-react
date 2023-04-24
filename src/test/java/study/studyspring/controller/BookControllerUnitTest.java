@@ -51,14 +51,6 @@ public class BookControllerUnitTest {
     @MockBean
     private UserService userService;
 
-    @BeforeEach
-    public void setUp(){
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
-                .addFilter(new CharacterEncodingFilter("UTF-8", true))
-                .apply(SecurityMockMvcConfigurers.springSecurity())
-                .build();
-    }
-
     @Test
     @WithMockUser(username = "admin")
     public void saveTest() throws Exception {
@@ -98,6 +90,24 @@ public class BookControllerUnitTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", Matchers.hasSize(2)))
                 .andExpect(jsonPath("$.[0].title").value("TestTitle"))
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    @WithMockUser(username = "admin")
+    public void findByIdTest() throws Exception {
+        //given
+        Long id = 1L;
+        when(bookService.getOneBook(id)).thenReturn(new Book(1L,"JavaTest","JavaAuthor"));
+
+        //when
+        ResultActions resultActions = mockMvc.perform(get("/book/{id}",id)
+                .accept(MediaType.APPLICATION_JSON));
+
+        //then
+        resultActions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value("JavaTest"))
                 .andDo(MockMvcResultHandlers.print());
     }
 }
