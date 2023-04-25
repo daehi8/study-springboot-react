@@ -27,8 +27,7 @@ import java.util.List;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -108,6 +107,29 @@ public class BookControllerUnitTest {
         resultActions
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value("JavaTest"))
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    @WithMockUser(username = "admin")
+    public void modifyTest() throws Exception {
+        //given
+        Long id = 1L;
+        Book book = new Book(null, "BookTitle", "BookAuthor");
+        String content = new ObjectMapper().writeValueAsString(book);
+        when(bookService.modifyBook(id,book)).thenReturn(new Book(1L,"BookTitle","BookAuthor"));
+
+        //when
+        ResultActions resultActions = mockMvc.perform(put("/book/{id}",id)
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(content)
+                .accept(MediaType.APPLICATION_JSON));
+
+        //then
+        resultActions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value("BookTitle"))
                 .andDo(MockMvcResultHandlers.print());
     }
 }
