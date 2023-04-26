@@ -3,20 +3,17 @@ package study.studyspring.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.filter.CharacterEncodingFilter;
 import study.studyspring.entity.Book;
 import study.studyspring.jwt.TokenProvider;
 import study.studyspring.service.BookService;
@@ -25,6 +22,7 @@ import study.studyspring.service.UserService;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -131,5 +129,28 @@ public class BookControllerUnitTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value("BookTitle"))
                 .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    @WithMockUser(username = "admin")
+    public void deleteTest() throws Exception {
+        //given
+        Long id = 1L;
+        when(bookService.deleteBook(id)).thenReturn("ok");
+
+        //when
+        ResultActions resultAction = mockMvc.perform(delete("/book/{id}",id)
+                .with(csrf())
+                .accept(MediaType.TEXT_PLAIN));
+
+        //then
+        resultAction
+                .andExpect(status().isOk())
+                .andDo(MockMvcResultHandlers.print());
+
+        MvcResult requestReult = resultAction.andReturn();
+        String result = requestReult.getResponse().getContentAsString();
+
+        assertEquals("ok",result);
     }
 }
