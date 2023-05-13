@@ -15,12 +15,12 @@ function App() {
       <Header />
       <Container>
         <Routes>
-          <Route path="/" exact={true} component={Home} />
-          <Route path="/saveForm" exact={true} component={SaveForm} />
-          <Route path="/book/:id" exact={true} component={Detail} />
-          <Route path="/loginForm" exact={true} component={LoginForm} />
-          <Route path="/joinForm" exact={true} component={JoinForm} />
-          <Route path="/modifyForm" exact={true} component={ModifyForm} />
+          <Route path="/" exact={true} element={<Home />} />
+          <Route path="/saveForm" exact={true} element={<SaveForm />} />
+          <Route path="/book/:id" exact={true} element={<Detail />} />
+          <Route path="/loginForm" exact={true} element={<LoginForm />} />
+          <Route path="/joinForm" exact={true} element={<JoinForm />} />
+          <Route path="/modifyForm" exact={true} element={<ModifyForm />} />
         </Routes>
       </Container>
     </div>
