@@ -20,7 +20,7 @@ function App() {
           <Route path="/book/:id" exact={true} element={<Detail />} />
           <Route path="/loginForm" exact={true} element={<LoginForm />} />
           <Route path="/joinForm" exact={true} element={<JoinForm />} />
-          <Route path="/modifyForm" exact={true} element={<ModifyForm />} />
+          <Route path="/modifyForm/:id" exact={true} element={<ModifyForm />} />
         </Routes>
       </Container>
     </div>
